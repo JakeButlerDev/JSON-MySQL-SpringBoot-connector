@@ -44,6 +44,30 @@ public class UserModel {
         return website;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     //    {
 //        "id": 1,
 //            "name": "Leanne Graham",

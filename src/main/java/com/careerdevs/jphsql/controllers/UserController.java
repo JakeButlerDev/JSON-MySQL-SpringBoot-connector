@@ -73,6 +73,7 @@ public class UserController {
         }
     }
 
+    // Create a new user and Post to our SQL db
     @PostMapping
     public ResponseEntity<?> uploadOneUser (@RequestBody UserModel newUserData) {
 
@@ -151,6 +152,25 @@ public class UserController {
         }
     }
     //TODO: PUT one user by id (from SQL) - must make sure a user with the given id exists
+
+    // Still need to test this route
+    //PUT one user already in SQL database
+    @PutMapping("/sql/id/{id}")
+    public ResponseEntity<?> updateOneUserSQL(@RequestBody UserModel updatedUserData) {
+        try {
+            if (userRepository.existsById(updatedUserData.getId())) {
+//                    userRepository.
+                return ResponseEntity.ok("Data accepted, user with id " + updatedUserData.getId() + " altered in database.");
+            } else {
+                return ResponseEntity.status(400).body("User with id " + updatedUserData.getId() + " not found. ID must be an integer.");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 
     //BONUS: Add address and company to UserModel
 

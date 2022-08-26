@@ -6,6 +6,30 @@ import javax.persistence.*;
 @Table(name = "User")
 public class UserModel {
 
+        //    {
+    //            "id": 1,
+    //            "name": "Leanne Graham",
+    //            "username": "Bret",
+    //            "email": "Sincere@april.biz",
+    //            "address": {
+    //                  "street": "Kulas Light",
+    //                  "suite": "Apt. 556",
+    //                  "city": "Gwenborough",
+    //                  "zipcode": "92998-3874",
+    //                  "geo": {
+    //                      "lat": "-37.3159",
+    //                      "lng": "81.1496"
+    //        }
+    //    },
+    //           "phone": "1-770-736-8031 x56442",
+    //            "website": "hildegard.org",
+    //            "company": {
+    //              "name": "Romaguera-Crona",
+    //               "catchPhrase": "Multi-layered client-server neural-net",
+    //               "bs": "harness real-time e-markets"
+    //    }
+    //    },
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -15,6 +39,30 @@ public class UserModel {
     private String email;
     private String phone;
     private String website;
+//    private Object company;
+
+//    "company": {
+//        "name": "Romaguera-Crona",
+//                "catchPhrase": "Multi-layered client-server neural-net",
+//                "bs": "harness real-time e-markets"
+//    }
+//    public static class UserCompany {
+//        private String name;
+//        private String catchPhrase;
+//        private String bs;
+//
+//        public String getName() {
+//        return name;
+//        }
+//
+//        public String getCatchPhrase() {
+//            return catchPhrase;
+//        }
+//
+//        public String getBs() {
+//            return bs;
+//        }
+//    }
 
     public int getId() {
         return id;
@@ -68,29 +116,9 @@ public class UserModel {
         this.website = website;
     }
 
-    //    {
-//        "id": 1,
-//            "name": "Leanne Graham",
-//            "username": "Bret",
-//            "email": "Sincere@april.biz",
-//            "address": {
-//        "street": "Kulas Light",
-//                "suite": "Apt. 556",
-//                "city": "Gwenborough",
-//                "zipcode": "92998-3874",
-//                "geo": {
-//            "lat": "-37.3159",
-//                    "lng": "81.1496"
-//        }
-//    },
-//        "phone": "1-770-736-8031 x56442",
-//            "website": "hildegard.org",
-//            "company": {
-//        "name": "Romaguera-Crona",
-//                "catchPhrase": "Multi-layered client-server neural-net",
-//                "bs": "harness real-time e-markets"
+//    public Object getCompany() {
+//        return company;
 //    }
-//    },
 }
 
 

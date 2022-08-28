@@ -5,11 +5,13 @@ import com.careerdevs.jphsql.repositories.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
@@ -27,6 +29,32 @@ public class ToDoController {
             ToDoModel[] allTodos = restTemplate.getForObject(JPH_API_URL, ToDoModel[].class);
 
             return ResponseEntity.ok(allTodos);
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    // GET one to_o with id from SQL db
+    @GetMapping("/sql/id/{id}")
+    public ResponseEntity<?> getOneTodoById(@PathVariable String id) {
+        try {
+            int todoId = Integer.parseInt(id);
+
+            System.out.println("Getting todo with ID: " + id);
+
+            Optional<ToDoModel> foundTodo = toDoRepository.findById(todoId);
+
+            if (foundTodo.isEmpty()) return ResponseEntity.status(404).body("Todo Not Found With ID: " + id);
+
+            return ResponseEntity.ok(foundTodo.get());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(404).body("User Not Found With ID: " + id);
+
         } catch (Exception e) {
             System.out.println(e.getClass());
             System.out.println(e.getMessage());

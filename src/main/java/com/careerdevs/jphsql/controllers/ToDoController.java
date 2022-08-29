@@ -116,7 +116,7 @@ public class ToDoController {
         try {
             int todoId = Integer.parseInt(id);
 
-            System.out.println("Getting todo with ID:"  + id);
+            System.out.println("Deleting todo with ID:"  + id);
 
             Optional<ToDoModel> foundTodo = toDoRepository.findById(todoId);
 

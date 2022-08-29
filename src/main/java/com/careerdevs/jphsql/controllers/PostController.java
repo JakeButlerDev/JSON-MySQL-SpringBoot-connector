@@ -55,7 +55,7 @@ public class PostController {
             return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
 
         } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(404).body("User Not Found With ID: " + id);
+            return ResponseEntity.status(404).body("Post Not Found With ID: " + id);
 
         } catch (Exception e) {
             System.out.println(e.getClass());
@@ -117,18 +117,18 @@ public class PostController {
         try {
             int postId = Integer.parseInt(id);
 
-            System.out.println("Getting post with ID: " + id);
+            System.out.println("Deleting post with ID: " + id);
 
             Optional<PostModel> foundPost = postRepository.findById(postId);
 
-            if (foundPost.isEmpty()) return ResponseEntity.status(404).body("User Not Found With ID: " + id);
+            if (foundPost.isEmpty()) return ResponseEntity.status(404).body("Post Not Found With ID: " + id);
 
             return ResponseEntity.ok(foundPost.get());
         } catch (NumberFormatException e) {
             return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
 
         } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(404).body("User Not Found With ID: " + id);
+            return ResponseEntity.status(404).body("Post Not Found With ID: " + id);
 
         } catch (Exception e) {
             System.out.println(e.getClass());

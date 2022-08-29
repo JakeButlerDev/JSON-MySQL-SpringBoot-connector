@@ -115,7 +115,7 @@ public class CommentController {
         try {
             int commentId = Integer.parseInt(id);
 
-            System.out.println("Getting comment with ID: " + id);
+            System.out.println("Deleting comment with ID: " + id);
 
             Optional<CommentModel> foundComment = commentRepository.findById(commentId);
 
@@ -128,7 +128,7 @@ public class CommentController {
             return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
 
         } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(404).body("User Not Found With ID: " + id);
+            return ResponseEntity.status(404).body("Comment Not Found With ID: " + id);
 
         } catch (Exception e) {
             System.out.println(e.getClass());

@@ -29,6 +29,10 @@ public class ToDoModel {
         return userId;
     }
 
+    public void removeId() {
+        id = 0;
+    }
+
     public String getTitle() {
         return title;
     }

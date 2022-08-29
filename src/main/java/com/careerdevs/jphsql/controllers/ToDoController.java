@@ -93,9 +93,13 @@ public class ToDoController {
         }
     }
 
+    // Create a new To-do and POST to SQL db
     @PostMapping
     public ResponseEntity<?> uploadOneTodo(@RequestBody ToDoModel newTodoData) {
         try {
+            newTodoData.removeId();
+
+
             ToDoModel savedTodo = toDoRepository.save(newTodoData);
 
             return ResponseEntity.ok(savedTodo);
@@ -105,4 +109,51 @@ public class ToDoController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    // DELETE one user with id from SQL db
+    @DeleteMapping("/sql/id/{id}")
+    public ResponseEntity<?> deleteOneTodoById(@PathVariable String id) {
+        try {
+            int todoId = Integer.parseInt(id);
+
+            System.out.println("Getting todo with ID:"  + id);
+
+            Optional<ToDoModel> foundTodo = toDoRepository.findById(todoId);
+
+            if (foundTodo.isEmpty()) return ResponseEntity.status(404).body("Todo Not Found With ID: " + id);
+
+            toDoRepository.deleteById(todoId);
+
+            return ResponseEntity.ok(foundTodo.get());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(404).body("Todo Not Found With ID: " + id);
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    // DELETE all Todos from SQL db - return how many were deleted
+    @DeleteMapping("/sql/all")
+    public ResponseEntity<?> deleteAllTodosSQL() {
+        try {
+            long count = toDoRepository.count();
+            toDoRepository.deleteAll();
+
+            return ResponseEntity.ok("Deleted todos: " + count);
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    //TODO: PUT one Todo by id, send in data and overwrite current id data
+
+
 }

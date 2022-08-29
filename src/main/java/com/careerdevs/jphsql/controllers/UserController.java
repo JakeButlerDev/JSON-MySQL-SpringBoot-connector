@@ -3,7 +3,6 @@ package com.careerdevs.jphsql.controllers;
 import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -182,7 +181,7 @@ public class UserController {
             // throws NumberFormatException if id is not a int
             int userId = Integer.parseInt(id);
 
-            System.out.println("Getting User With ID: " + id);
+            System.out.println("Deleting User With ID: " + id);
 
             // Get data from SQL
             Optional<UserModel> foundUser = userRepository.findById(userId);

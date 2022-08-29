@@ -27,6 +27,10 @@ public class PhotoModel {
         return id;
     }
 
+    public void removeId() {
+        id = 0;
+    }
+
     public String getAlbumId() {
         return albumId;
     }

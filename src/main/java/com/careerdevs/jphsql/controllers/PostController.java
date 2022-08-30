@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "http://localhost:3500")
 public class PostController {
 
     private final String JPI_API_URL = "https://jsonplaceholder.typicode.com/posts";
@@ -152,5 +153,28 @@ public class PostController {
         }
     }
 
-    //TODO: PUT one post already in db, overwrite data with new RequestBody
+    //PUT one post already in SQL db
+    @PutMapping("/sql/id/{id}")
+    public ResponseEntity<?> updateOnePostSQL(@PathVariable String id, @RequestBody PostModel updatePostData) {
+        try {
+            int postId = Integer.parseInt(id);
+
+            Optional<PostModel> foundPost = postRepository.findById(postId);
+
+            if (foundPost.isEmpty()) return ResponseEntity.status(404).body("Post Not Found With ID: " + id);
+
+            if (postId != updatePostData.getId()) return ResponseEntity.status(400).body("Post IDs did not match!");
+
+            postRepository.save(updatePostData);
+
+            return ResponseEntity.ok(updatePostData);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

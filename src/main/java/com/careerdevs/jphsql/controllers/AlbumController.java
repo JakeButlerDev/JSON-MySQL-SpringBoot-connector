@@ -1,6 +1,7 @@
 package com.careerdevs.jphsql.controllers;
 
 import com.careerdevs.jphsql.models.AlbumModel;
+import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/albums")
+@CrossOrigin(origins = "http://localhost:3500")
 public class AlbumController {
 
     private final String JPH_API_URL = "https://jsonplaceholder.typicode.com/albums";
@@ -150,6 +152,30 @@ public class AlbumController {
         }
     }
 
-    //TODO: PUT one album by id, overwrite data stored with new data passed in
+    // PUT one album already in SQL database
+    @PutMapping("/sql/id/{id}")
+    public ResponseEntity<?> updateOneAlbumSQL(@PathVariable String id, @RequestBody AlbumModel updateAlbumData) {
+        try {
+            int albumId = Integer.parseInt(id);
+
+            Optional<AlbumModel> foundAlbum = albumRepository.findById(albumId);
+
+            if (foundAlbum.isEmpty()) return ResponseEntity.status(404).body("Album Not Found With ID: " + id);
+
+            if (albumId != updateAlbumData.getId()) return ResponseEntity.status(400).body("Album IDs did not match!");
+
+            albumRepository.save(updateAlbumData);
+
+            return ResponseEntity.ok(updateAlbumData);
+
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 
 }

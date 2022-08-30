@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/comments")
+@CrossOrigin(origins = "http://localhost:3500")
 public class CommentController {
 
     private final String JPH_API_URL = "https://jsonplaceholder.typicode.com/comments";
@@ -153,5 +154,28 @@ public class CommentController {
         }
     }
 
-    //TODO: PUT one comment - alter data already inside and pass in and save new data
+    //PUT one comment already in SQL db
+    @PutMapping("/sql/id/{id}")
+    public ResponseEntity<?> updateOneCommentSQL(@PathVariable String id, @RequestBody CommentModel updateCommentData) {
+        try {
+            int commentId = Integer.parseInt(id);
+
+            Optional<CommentModel> foundComment = commentRepository.findById(commentId);
+
+            if(foundComment.isEmpty()) return ResponseEntity.status(404).body("Comment Not Found With ID: " + id);
+
+            if (commentId != updateCommentData.getId()) return ResponseEntity.status(400).body("Comment IDs did not match!");
+
+            commentRepository.save(updateCommentData);
+
+            return ResponseEntity.ok(updateCommentData);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

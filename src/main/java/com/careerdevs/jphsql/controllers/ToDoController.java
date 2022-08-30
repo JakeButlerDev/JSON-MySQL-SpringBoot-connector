@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
+@CrossOrigin(origins = "http://localhost:3500")
 public class ToDoController {
 
     private final String JPH_API_URL = "https://jsonplaceholder.typicode.com/todos";
@@ -153,7 +154,29 @@ public class ToDoController {
         }
     }
 
-    //TODO: PUT one Todo by id, send in data and overwrite current id data
+    //PUT one to-do already in SQL db
+    @PutMapping("/sql/id/{id}")
+    public ResponseEntity<?> updateOneTodoSQL(@PathVariable String id, @RequestBody ToDoModel updateTodoData) {
+        try {
+            int todoId = Integer.parseInt(id);
 
+            Optional<ToDoModel> foundTodo = toDoRepository.findById(todoId);
+
+            if (foundTodo.isEmpty()) return ResponseEntity.status(404).body("Todo Not Found With ID: " + id);
+
+            if (todoId != updateTodoData.getId()) return ResponseEntity.status(400).body("Todo IDs did not match!");
+
+            toDoRepository.save(updateTodoData);
+
+            return ResponseEntity.ok(updateTodoData);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 
 }

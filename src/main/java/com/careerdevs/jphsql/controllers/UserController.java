@@ -2,6 +2,7 @@ package com.careerdevs.jphsql.controllers;
 
 import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:3500")
 public class UserController {
 
     private final String JPH_API_URL = "https://jsonplaceholder.typicode.com/users";
@@ -242,19 +244,45 @@ public class UserController {
     }
 
 
-    //TODO: PUT one user by id (from SQL) - must make sure a user with the given id exists
-
+    //PUT one user by id (from SQL) - must make sure a user with the given id exists
     // Still need to test this route
     //PUT one user already in SQL database - MY METHOD UNFINISHED
+//    @PutMapping("/sql/id/{id}")
+//    public ResponseEntity<?> updateOneUserSQL(@RequestBody UserModel updatedUserData) {
+//        try {
+//            int userId = updatedUserData.getId();
+//
+//            userRepository.findById(userId);
+//
+//            UserModel editedUser = userRepository.save(updatedUserData);
+//
+//            return ResponseEntity.ok(editedUser);
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getClass());
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.internalServerError().body(e.getMessage());
+//        }
+//    }
+
+    // PUT one user already in SQL database - GABE METHOD
     @PutMapping("/sql/id/{id}")
-    public ResponseEntity<?> updateOneUserSQL(@RequestBody UserModel updatedUserData) {
+    public ResponseEntity<?> updateOneUserSQL(@PathVariable String id, @RequestBody UserModel updateUserData) {
         try {
-            if (userRepository.existsById(updatedUserData.getId())) {
-//                    userRepository.
-                return ResponseEntity.ok("Data accepted, user with id " + updatedUserData.getId() + " altered in database.");
-            } else {
-                return ResponseEntity.status(400).body("User with id " + updatedUserData.getId() + " not found. ID must be an integer.");
-            }
+            int userId = Integer.parseInt(id);
+
+            Optional<UserModel> foundUser = userRepository.findById(userId);
+
+            if (foundUser.isEmpty()) return ResponseEntity.status(404).body("User Not Found With ID: " + id);
+
+            if (userId != updateUserData.getId()) return ResponseEntity.status(400).body("User IDs did not match!");
+
+            userRepository.save(updateUserData);
+
+            return ResponseEntity.ok(updateUserData);
+
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
 
         } catch (Exception e) {
             System.out.println(e.getClass());

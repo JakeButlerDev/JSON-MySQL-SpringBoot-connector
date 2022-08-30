@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/photos")
+@CrossOrigin(origins = "http://localhost:3500")
 public class PhotoController {
 
     private final String JPH_API_URL = "https://jsonplaceholder.typicode.com/photos";
@@ -152,6 +153,29 @@ public class PhotoController {
         }
     }
 
-    //TODO: PUT one photo by id, edit current data and overwirte with passed in data
+    //PUT one photo with id already in SQL db
+    @PutMapping("/sql/id/{id}")
+    public ResponseEntity<?> updateOnePhotoSQL(@PathVariable String id, @RequestBody PhotoModel updatePhotoData) {
+        try {
+            int photoId = Integer.parseInt(id);
+
+            Optional <PhotoModel> foundPhoto = photoRepository.findById(photoId);
+
+            if (foundPhoto.isEmpty()) return ResponseEntity.status(404).body("Photo Not Found With ID: " + id);
+
+            if (photoId != updatePhotoData.getId()) return ResponseEntity.status(400).body("Photo IDs did not match!");
+
+            photoRepository.save(updatePhotoData);
+
+            return ResponseEntity.ok(updatePhotoData);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body("ID: " + id + ", is not a valid id. Must be a whole number");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 
 }

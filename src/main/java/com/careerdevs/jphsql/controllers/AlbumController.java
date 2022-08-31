@@ -79,12 +79,13 @@ public class AlbumController {
     }
 
     // Upload all Album data to SQL database
-    @PostMapping("/all")
+    @PostMapping("/sql/all")
     public ResponseEntity<?> uploadAllAlbumDataToSQL(RestTemplate restTemplate) {
         try {
             AlbumModel[] allAlbums = restTemplate.getForObject(JPH_API_URL, AlbumModel[].class);
 
             assert allAlbums != null;
+            for (AlbumModel album : allAlbums) { album.removeId(); }
             List<AlbumModel> savedAlbums = albumRepository.saveAll(Arrays.asList(allAlbums));
 
             return ResponseEntity.ok(allAlbums);

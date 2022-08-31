@@ -78,7 +78,7 @@ public class CommentController {
     }
 
     // POST all comments to SQL db
-    @PostMapping("/all")
+    @PostMapping("/sql/all")
     public ResponseEntity<?> uploadAllCommentDataToSQL(RestTemplate restTemplate) {
         try {
             CommentModel[] allComments = restTemplate.getForObject(JPH_API_URL, CommentModel[].class);

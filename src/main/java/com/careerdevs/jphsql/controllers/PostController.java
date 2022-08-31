@@ -1,6 +1,7 @@
 package com.careerdevs.jphsql.controllers;
 
 import com.careerdevs.jphsql.models.PostModel;
+import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -81,12 +82,13 @@ public class PostController {
     }
 
     // POST all posts to SQL db
-    @PostMapping("/all")
+    @PostMapping("/sql/all")
     public ResponseEntity<?> uploadAllPostsToSQL(RestTemplate restTemplate) {
         try {
             PostModel[] allPosts = restTemplate.getForObject(JPI_API_URL, PostModel[].class);
 
             assert allPosts != null;
+            for (PostModel post : allPosts) { post.removeId(); }
             List<PostModel> savedPosts = postRepository.saveAll(Arrays.asList(allPosts));
 
             return ResponseEntity.ok(savedPosts);

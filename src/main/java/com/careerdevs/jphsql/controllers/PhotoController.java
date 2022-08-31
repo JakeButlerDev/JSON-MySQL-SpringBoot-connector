@@ -1,6 +1,7 @@
 package com.careerdevs.jphsql.controllers;
 
 import com.careerdevs.jphsql.models.PhotoModel;
+import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -78,12 +79,13 @@ public class PhotoController {
     }
 
     // Storing all API photo data into SQL db
-    @PostMapping("/all")
+    @PostMapping("/sql/all")
     public ResponseEntity<?> uploadAllPhotoDataToSQL(RestTemplate restTemplate) {
         try {
             PhotoModel[] allPhotos = restTemplate.getForObject(JPH_API_URL, PhotoModel[].class);
 
             assert allPhotos != null;
+            for (PhotoModel photo : allPhotos) { photo.removeId(); }
             List<PhotoModel> savedPhotos = photoRepository.saveAll(Arrays.asList(allPhotos));
 
             return ResponseEntity.ok(savedPhotos);

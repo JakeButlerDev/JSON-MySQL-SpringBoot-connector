@@ -2,7 +2,6 @@ package com.careerdevs.jphsql.controllers;
 
 import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -110,7 +109,7 @@ public class UserController {
      }
 
      // POST all users to SQL db
-    @PostMapping("/all")
+    @PostMapping("/sql/all")
     public ResponseEntity<?> uploadAllUserDataToSQL(RestTemplate restTemplate) {
 
         try {
@@ -120,7 +119,7 @@ public class UserController {
 
 
             // One option, a for each loop
-            for (UserModel allUser : allUsers) { allUser.removeId(); }
+            for (UserModel user : allUsers) { user.removeId(); }
 
             //TODO: remove id from each user, find another way?
 

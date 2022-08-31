@@ -17,6 +17,10 @@ public class AlbumModel {
         return id;
     }
 
+    public void removeId() {
+        id = 0;
+    }
+
     public String getUserId() {
         return userId;
     }

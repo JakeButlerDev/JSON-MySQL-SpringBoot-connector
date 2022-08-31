@@ -1,6 +1,8 @@
 package com.careerdevs.jphsql.controllers;
 
+import com.careerdevs.jphsql.models.PostModel;
 import com.careerdevs.jphsql.models.ToDoModel;
+import com.careerdevs.jphsql.models.UserModel;
 import com.careerdevs.jphsql.repositories.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -78,12 +80,13 @@ public class ToDoController {
     }
 
     // Store all API data into SQL db
-    @PostMapping("/all")
+    @PostMapping("/sql/all")
     public ResponseEntity<?> uploadAllTodoDataToSQL(RestTemplate restTemplate) {
         try {
             ToDoModel[] allTodos = restTemplate.getForObject(JPH_API_URL, ToDoModel[].class);
 
             assert allTodos != null;
+            for (ToDoModel todo : allTodos) { todo.removeId(); }
             List<ToDoModel> savedTodos = toDoRepository.saveAll(Arrays.asList(allTodos));
 
             return ResponseEntity.ok(savedTodos);

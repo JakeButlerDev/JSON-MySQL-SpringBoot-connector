@@ -124,6 +124,8 @@ public class PostController {
 
             Optional<PostModel> foundPost = postRepository.findById(postId);
 
+            postRepository.deleteById(postId);
+
             if (foundPost.isEmpty()) return ResponseEntity.status(404).body("Post Not Found With ID: " + id);
 
             return ResponseEntity.ok(foundPost.get());

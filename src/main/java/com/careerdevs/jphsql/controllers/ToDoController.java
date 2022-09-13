@@ -102,8 +102,6 @@ public class ToDoController {
     public ResponseEntity<?> uploadOneTodo(@RequestBody ToDoModel newTodoData) {
         try {
             newTodoData.removeId();
-
-
             ToDoModel savedTodo = toDoRepository.save(newTodoData);
 
             return ResponseEntity.ok(savedTodo);

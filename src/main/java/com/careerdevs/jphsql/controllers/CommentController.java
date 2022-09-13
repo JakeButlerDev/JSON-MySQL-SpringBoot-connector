@@ -85,7 +85,7 @@ public class CommentController {
 
             assert allComments != null;
 
-            for (CommentModel allComment : allComments) { allComment.removeId(); }
+            for (CommentModel Comment : allComments) { Comment.removeId(); }
             List<CommentModel> savedComments = commentRepository.saveAll(Arrays.asList(allComments));
 
             return ResponseEntity.ok(savedComments);
